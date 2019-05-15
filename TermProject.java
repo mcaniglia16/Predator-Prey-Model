@@ -95,82 +95,27 @@ public class TermProject{
 		double[]RabbitArr = new double[N];
 		double[]CarrotArr = new double[N];
 		
-        for (int i = 1; i < (N/2); i++) //Normal behavior from year 0 to year 50
+		
+		
+		for (int i = 1; i < N; i++) 
 		{
+			
 			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt);
+			if(i>=(80*365.25) && i<=((80*365.25)+14)) Fox -= (furHuntersKillRate*Fox*dt);
 			FoxArr[i] = Fox;
 			
             Rabbit = Rabbit + ((capRabbit-Rabbit)/capRabbit) * ((Rabbit*birthRabbit + rabbitGrowRate*Rabbit*Carrot)*dt) - (foxHuntRate*Fox*Rabbit*dt) - (deathRabbit*Rabbit*dt);
 			RabbitArr[i] = Rabbit;
 			
             Carrot = Carrot + ((capCarrot-Carrot)/capCarrot) * (growCarrot*Carrot*dt) - (rabbitEatRate*Rabbit*dt);
+			
+			
+			if(i>=(50*365.25) && i<=(51*365.25)) Carrot -= (Carrot*chemicalSoilKillRate);
 			CarrotArr[i] = Carrot;
 			
             time = time + dt;
 			timeArr[i] = time;
-		}
-		
-		
-		for (int i = (N/2); i < ((N/2)+365); i++) //Chemicals in the soil killing carrots for a year form year 50 until year 51
-		{
 			
-			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt);
-			FoxArr[i] = Fox;
-			
-            Rabbit = Rabbit + ((capRabbit-Rabbit)/capRabbit) * ((Rabbit*birthRabbit + rabbitGrowRate*Rabbit*Carrot)*dt) - (foxHuntRate*Fox*Rabbit*dt) - (deathRabbit*Rabbit*dt);
-			RabbitArr[i] = Rabbit;
-			
-            Carrot = Carrot + ((capCarrot-Carrot)/capCarrot) * (growCarrot*Carrot*dt) - (rabbitEatRate*Rabbit*dt) - (Carrot*chemicalSoilKillRate);
-			CarrotArr[i] = Carrot;
-			
-            time = time + dt;
-			timeArr[i] = time;
-		} 
-	
-	 for (int i = ((N/2)+365); i < ((8*N)/10); i++) //Normal behaviour from year 51 until year 80
-		{
-			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt);
-			FoxArr[i] = Fox;
-			
-            Rabbit = Rabbit + ((capRabbit-Rabbit)/capRabbit) * ((Rabbit*birthRabbit + rabbitGrowRate*Rabbit*Carrot)*dt) - (foxHuntRate*Fox*Rabbit*dt) - (deathRabbit*Rabbit*dt);
-			RabbitArr[i] = Rabbit;
-			
-            Carrot = Carrot + ((capCarrot-Carrot)/capCarrot) * (growCarrot*Carrot*dt) - (rabbitEatRate*Rabbit*dt);
-			CarrotArr[i] = Carrot;
-			
-            time = time + dt;
-			timeArr[i] = time;
-		}
-		
-		 for (int i = ((8*N)/10); i < (((8*N)/10)+14); i++) //Fox population is hunted for their fur for 2 weeks starting at year 80
-		{
-	
-			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt) - (furHuntersKillRate*Fox*dt);
-			FoxArr[i] = Fox;
-			
-            Rabbit = Rabbit + ((capRabbit-Rabbit)/capRabbit) * ((Rabbit*birthRabbit + rabbitGrowRate*Rabbit*Carrot)*dt) - (foxHuntRate*Fox*Rabbit*dt) - (deathRabbit*Rabbit*dt);
-			RabbitArr[i] = Rabbit;
-			
-            Carrot = Carrot + ((capCarrot-Carrot)/capCarrot) * (growCarrot*Carrot*dt) - (rabbitEatRate*Rabbit*dt);
-			CarrotArr[i] = Carrot;
-			
-            time = time + dt;
-			timeArr[i] = time;
-		}
-		
-		for (int i = (((8*N)/10)+14); i < N; i++) //Normal behaviour from two weeks into year 80 until year 100
-		{
-			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt);
-			FoxArr[i] = Fox;
-			
-            Rabbit = Rabbit + ((capRabbit-Rabbit)/capRabbit) * ((Rabbit*birthRabbit + rabbitGrowRate*Rabbit*Carrot)*dt) - (foxHuntRate*Fox*Rabbit*dt) - (deathRabbit*Rabbit*dt);
-			RabbitArr[i] = Rabbit;
-			
-            Carrot = Carrot + ((capCarrot-Carrot)/capCarrot) * (growCarrot*Carrot*dt) - (rabbitEatRate*Rabbit*dt);
-			CarrotArr[i] = Carrot;
-			
-            time = time + dt;
-			timeArr[i] = time;
 		}
 	
 		plot(timeArr, FoxArr, RabbitArr, CarrotArr);
@@ -194,8 +139,11 @@ public class TermProject{
         plot.addLinePlot("Rabbit", Color.BLUE, Rabbit);
         plot.addLinePlot("Carrot", Color.ORANGE, Carrot);
         plot.setAxisLabel(0,"Time (days)");
+		
+		
         plot.getAxis(0).setLabelPosition(0.5,-0.1);
         plot.setAxisLabel(1,"Population (thousands)");
+		
         BaseLabel title = new BaseLabel("Fox&Rabbit Predator Prey Model", Color.BLACK, 0.5, 1.1);
         title.setFont(new Font("Arial", Font.BOLD, 25));
         plot.addPlotable(title);
@@ -210,11 +158,11 @@ public class TermProject{
         double maxT = time[time.length-1];
 		
         String labelF = new String("Max: "+maxF);
-        plot.addLabel(labelF,plot.COLORLIST[0], maxT*1.1, maxF);
+        plot.addLabel(labelF,Color.RED, maxT*1.1, maxF);
         String labelR = new String("Max: "+maxR);
-        plot.addLabel(labelR,plot.COLORLIST[1], maxT*1.1, maxR);
+        plot.addLabel(labelR,Color.BLUE, maxT*1.1, maxR);
         String labelC = new String("Max: "+maxC);
-        plot.addLabel(labelC,plot.COLORLIST[2], maxT*1.1, maxC);
+        plot.addLabel(labelC,Color.ORANGE, maxT*1.1, maxC);
 
 
         JFrame frame = new JFrame("Output of Fox.java");
