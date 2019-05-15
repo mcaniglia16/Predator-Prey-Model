@@ -23,21 +23,23 @@ public class TermProject{
 			All constants are /day
 		*/
 		public static final double dt = 1.;        			// Time step (in days)
-		public static final double tFinal = 12000.0;   		// Total time of simulation (in days)
-		public static final double capFox = 20;       		// Carrying capacity, in thousands, of foxes
-		public static final double capRabbit = 40;    		// Carrying capacity, in thousands, of rabbits
-		public static final double capCarrot = 100;   		// Carrying capaciy, in thousands, of carrots
+		public static final double tFinal = 36525.0;   		// Total time of simulation (in days)
+		public static final double capFox = 18.0;       	// Carrying capacity, in thousands, of foxes
+		public static final double capRabbit = 40.0;		// Carrying capacity, in thousands, of rabbits
+		public static final double capCarrot = 100.0;		// Carrying capaciy, in thousands, of carrots
 		
 		
-		public static double birthFox = 0.001;				// Birthrate of foxes				//gestation period for foxes ~50 days
-		public static double birthRabbit = 0.001;			// Birthrate of rabbits				//gestation period for rabbits ~25 days
-		public static double growCarrot = 0.001;			// Growing rate of carrots			//~70 days for carrots to mature
-		public static double deathFox = 0.003;				// Deathrate of foxes
-		public static double deathRabbit = 0.00075;			// Deathrate of rabbits
-		public static double foxHuntRate = 	0.0005;			// Rate at which foxes eat rabbits
-		public static double rabbitEatRate = 0.004;			// Rate at which rabbits eat carrots
-		public static double foxGrowRate = 0.001;			// Rate at which foxes increase by consuming rabbits
-		public static double rabbitGrowRate = 0.0002;		//Rate at which rabbits increase by consuming carrots
+		public static double birthFox = 0.0001;				// Birthrate of foxes without prey (rabbits)
+		public static double birthRabbit = 0.0001;			// Birthrate of rabbits	without vegetation (carrots)			
+		public static double growCarrot = 0.0022;			// Growing rate of carrots			
+		public static double deathFox = 0.0005;				// Deathrate of foxes
+		public static double deathRabbit = 0.0005;			// Deathrate of rabbits
+		public static double foxHuntRate = 	0.0001;			// Rate at which foxes kills and eats rabbits per encounter
+		public static double rabbitEatRate = 0.003;			// Rate at which rabbits eat carrots
+		public static double foxGrowRate = 0.000175;		// Rate at which foxes increase by consuming rabbits per encounter
+		public static double rabbitGrowRate = 0.00012;		// Rate at which rabbits increase by consuming carrots
+		public static double chemicalSoilKillRate = 0.0015; // Rate at which the chemicals kill carrots
+		public static double furHuntersKillRate = 0.06;		// Rate at which the hunters kill the foxes for their fur
 	
 	 
 		////////////////////////start main method///////////////////////////
@@ -67,7 +69,7 @@ public class TermProject{
 
         Fox = 5.;		// *thousand foxes
         Rabbit = 10.;	// thousand rabbits
-        Carrot = 20.;	// thousand carrots
+        Carrot = 40.;	// thousand carrots
         time = 0.;
 		
 		///////////////////Print initial values to file using c-style printf////////////////
@@ -93,7 +95,7 @@ public class TermProject{
 		double[]RabbitArr = new double[N];
 		double[]CarrotArr = new double[N];
 		
-        for (int i = 1; i < (N); i++)
+        for (int i = 1; i < (N/2); i++) //Normal behavior from year 0 to year 50
 		{
 			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt);
 			FoxArr[i] = Fox;
@@ -106,20 +108,27 @@ public class TermProject{
 			
             time = time + dt;
 			timeArr[i] = time;
-			
-			
-			//if(i%20==0){
-				//System.out.println("Foxes: " + (Fox) + " \tRabbits: " + (Rabbit) + "\tCarrots: " + (Carrot) + "\tTime:" + time);
-			//}
 		}
 		
-		/*
-		I put this as a comment but here's where you can add a natureal disaster if you change it to i<(N/2) above
 		
-		for (int i = (N/2); i < N; i++)
+		for (int i = (N/2); i < ((N/2)+365); i++) //Chemicals in the soil killing carrots for a year form year 50 until year 51
 		{
-			Carrot=2/3*Carrot;
 			
+			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt);
+			FoxArr[i] = Fox;
+			
+            Rabbit = Rabbit + ((capRabbit-Rabbit)/capRabbit) * ((Rabbit*birthRabbit + rabbitGrowRate*Rabbit*Carrot)*dt) - (foxHuntRate*Fox*Rabbit*dt) - (deathRabbit*Rabbit*dt);
+			RabbitArr[i] = Rabbit;
+			
+            Carrot = Carrot + ((capCarrot-Carrot)/capCarrot) * (growCarrot*Carrot*dt) - (rabbitEatRate*Rabbit*dt) - (Carrot*chemicalSoilKillRate);
+			CarrotArr[i] = Carrot;
+			
+            time = time + dt;
+			timeArr[i] = time;
+		} 
+	
+	 for (int i = ((N/2)+365); i < ((8*N)/10); i++) //Normal behaviour from year 51 until year 80
+		{
 			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt);
 			FoxArr[i] = Fox;
 			
@@ -131,12 +140,42 @@ public class TermProject{
 			
             time = time + dt;
 			timeArr[i] = time;
-		} */
+		}
+		
+		 for (int i = ((8*N)/10); i < (((8*N)/10)+14); i++) //Fox population is hunted for their fur for 2 weeks starting at year 80
+		{
+	
+			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt) - (furHuntersKillRate*Fox*dt);
+			FoxArr[i] = Fox;
+			
+            Rabbit = Rabbit + ((capRabbit-Rabbit)/capRabbit) * ((Rabbit*birthRabbit + rabbitGrowRate*Rabbit*Carrot)*dt) - (foxHuntRate*Fox*Rabbit*dt) - (deathRabbit*Rabbit*dt);
+			RabbitArr[i] = Rabbit;
+			
+            Carrot = Carrot + ((capCarrot-Carrot)/capCarrot) * (growCarrot*Carrot*dt) - (rabbitEatRate*Rabbit*dt);
+			CarrotArr[i] = Carrot;
+			
+            time = time + dt;
+			timeArr[i] = time;
+		}
+		
+		for (int i = (((8*N)/10)+14); i < N; i++) //Normal behaviour from two weeks into year 80 until year 100
+		{
+			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt);
+			FoxArr[i] = Fox;
+			
+            Rabbit = Rabbit + ((capRabbit-Rabbit)/capRabbit) * ((Rabbit*birthRabbit + rabbitGrowRate*Rabbit*Carrot)*dt) - (foxHuntRate*Fox*Rabbit*dt) - (deathRabbit*Rabbit*dt);
+			RabbitArr[i] = Rabbit;
+			
+            Carrot = Carrot + ((capCarrot-Carrot)/capCarrot) * (growCarrot*Carrot*dt) - (rabbitEatRate*Rabbit*dt);
+			CarrotArr[i] = Carrot;
+			
+            time = time + dt;
+			timeArr[i] = time;
+		}
 	
 		plot(timeArr, FoxArr, RabbitArr, CarrotArr);
 	}
 	
-
         //////////////////// work to plot the data////////////////////////////
 
 	public static void plot(double[]time, double[] Fox, double[]Rabbit, double[] Carrot){
