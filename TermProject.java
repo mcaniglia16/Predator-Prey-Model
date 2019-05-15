@@ -22,25 +22,24 @@ public class TermProject{
 		/*  Declare constants and parameters
 			All constants are /day
 		*/
-		public static final double dt = 0.1;        		// Time step (in days)
-		public static final double tFinal = 365.0;   		// Total time of simulation (in days)
-		public static final double capFox = ; 5000      	// Carrying capacity of foxes
-		public static final double capRabbits = 20000;      // Carrying capacity of rabbits
-		public static final double capCarrots = 1000000;    // Carrying capaciy of carrots
-		/*
-		public static double numFox = ;						// Number of foxes
-		public static double numRabbits = ;					// Number of rabbits
-		public static double numCarrots = ;					// Number of carrots
-		*/
-		public static double birthFox = 0.005;				// Birthrate of foxes				//gestation period for foxes ~50 days
-		public static double birthRabbit = 0.1;				// Birthrate of rabbits				//gestation period for rabbits ~25 days
-		public static double growCarrot = 0.5;				// Growing rate of carrots			//~70 days for carrots to mature
-		public static double deathFox = 0.0025;				// Deathrate of foxes
-		public static double deathRabbit = 0.05;			// Deathrate of rabbits
-		public static double foxHuntRate = 	2;				// Rate at which foxes eat rabbits
-		public static double rabbitEatRate = 200;				// Rate at which rabbits eat carrots
+		public static final double dt = 1.;        			// Time step (in days)
+		public static final double tFinal = 8000.0;   		// Total time of simulation (in days)
+		public static final double capFox = 20;       		// Carrying capacity of foxes
+		public static final double capRabbit = 40;    		// Carrying capacity of rabbits
+		public static final double capCarrot = 100;   		// Carrying capaciy of carrots
+		
+		
+		public static double birthFox = 0.001;				// Birthrate of foxes				//gestation period for foxes ~50 days
+		public static double birthRabbit = 0.001;			// Birthrate of rabbits				//gestation period for rabbits ~25 days
+		public static double growCarrot = 0.001;			// Growing rate of carrots			//~70 days for carrots to mature
+		public static double deathFox = 0.003;				// Deathrate of foxes
+		public static double deathRabbit = 0.0005;			// Deathrate of rabbits
+		public static double foxHuntRate = 	0.0005;			// Rate at which foxes eat rabbits
+		public static double rabbitEatRate = 0.0035;		// Rate at which rabbits eat carrots
+		public static double foxGrowRate = 0.001;			// Rate at which foxes increase by consuming rabbits
+		public static double rabbitGrowRate = 0.00006;		//tte at which rabbits increase by consuming carrots
 	
-	
+	 
 		////////////////////////start main method///////////////////////////
 	public static void main(String[] args)
     {
@@ -59,10 +58,47 @@ public class TermProject{
 		}
 			
 		////////////initialize main vaiables for Euler's method////////////////
-		double F; //number of foxes
-		double R; //number of rabbits
-		double C; //number of carrots
-		double t; //time of simulation
+		//Populations:
+		
+		double Fox;		// Population of Foxes
+        double Rabbit;	// Population of Rabbits
+        double Carrot;	// Population of Carrots
+        double time;	// Time of the simulation (in days)
+
+        Fox = 5.;		// *thousand foxes
+        Rabbit = 10.;	// thousand rabbits
+        Carrot = 20.;	// thousand carrots
+        time = 0.;
+		
+		///////////////////Print initial values to file using c-style printf////////////////
+        outputFile.printf("%2.4f\t%6.1f\t%6.1f\t%6.1f\n",Fox,Rabbit,Carrot,time);
+		
+		///////////////////Using Euler's method to evolve the solution//////////////////////
+       
+	   
+        /////////////////// Max number of steps/////////////////////////////////////////////
+        int N = (int)(tFinal / dt) + 1;
+
+        ////////////////////// Euler loop for first scenario////////////////////////////////
+		/* 
+		
+		Logistic Growth:
+		(cap-popsize)/cap = limits the growth of the population near maxima.
+							At maximum, population does not grow much, but at minimum pop grows fast
+	
+		*/
+		
+        for (int i = 1; i < N; i++)
+		{
+			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt);
+            Rabbit = Rabbit + ((capRabbit-Rabbit)/capRabbit) * ((Rabbit*birthRabbit + rabbitGrowRate*Rabbit*Carrot)*dt) - (foxHuntRate*Fox*Rabbit*dt) - (deathRabbit*Rabbit*dt);
+            Carrot = Carrot + ((capCarrot-Carrot)/capCarrot) * (growCarrot*Carrot*dt) - (rabbitEatRate*Rabbit*dt);
+            time = time + dt;
+			
+			if(i%20==0){
+				System.out.println("Foxes: " + (int)(Fox) + " \tRabbits: " + (int)(Rabbit) + "\tCarrots: " + (int)(Carrot) + "\tTime:" + time);
+			}
+		}
 		
 		
 		
@@ -71,6 +107,8 @@ public class TermProject{
 		
 		
 		
+		
+		/*********************************************************************
         //////////////////// work to plot the data////////////////////////////
 
 		// Reimporting the data to store them as an array
@@ -80,7 +118,7 @@ public class TermProject{
         File file = new File(program);
 
         // Allocate the arrays
-        double[] Time = new double[N];
+        double[] time = new double[N];
         double[] Foxes = new double[N];
         double[] Rabbits = new double[N];
         double[] Carrots = new double[N];
@@ -161,29 +199,23 @@ public class TermProject{
         frame.setSize(725, 725);
         frame.setContentPane(plot);
         frame.setVisible(true);
-    }
-}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+    
+	**********************************************************************/
 	}
 }
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
 		
