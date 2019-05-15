@@ -177,15 +177,16 @@ public class TermProject{
 	}
 	
         //////////////////// work to plot the data////////////////////////////
-
+							//// in a method  ////
+							
 	public static void plot(double[]time, double[] Fox, double[]Rabbit, double[] Carrot){
-		// Reimporting the data to store them as an array
+		
         int i = 0;
 
-        // Create a PlotPanel (you can use it like a JPanel)
+        ////////////////////// Create PlotPanel /////////////////////////
         Plot2DPanel plot = new Plot2DPanel();
 
-        // Define the legend position
+        /////////////////// Define the legend position///////////////////
         plot.addLegend("SOUTH");
 
         // Add a line plot to the PlotPanel
@@ -199,7 +200,7 @@ public class TermProject{
         title.setFont(new Font("Arial", Font.BOLD, 25));
         plot.addPlotable(title);
 
-        // Add maximums
+        ////////////////////// Add maxima////////////////////////////////
         String[] scales = new String[2];
         scales = plot.getAxisScales();
        
@@ -207,6 +208,7 @@ public class TermProject{
         double maxR = Rabbit[Rabbit.length-1];
         double maxC = Carrot[Carrot.length-1];
         double maxT = time[time.length-1];
+		
         String labelF = new String("Max: "+maxF);
         plot.addLabel(labelF,plot.COLORLIST[0], maxT*1.1, maxF);
         String labelR = new String("Max: "+maxR);
