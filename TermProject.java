@@ -189,30 +189,30 @@ public class TermProject{
         plot.addLegend("SOUTH");
 
         // Add a line plot to the PlotPanel
-        plot.addLinePlot("Fox", time, Fox);
-        plot.addLinePlot("Rabbit", time, Rabbit);
-        plot.addLinePlot("Carrot", time, Carrot);
+        plot.addLinePlot("Fox", Color.RED, Fox);
+        plot.addLinePlot("Rabbit", Color.BLUE, Rabbit);
+        plot.addLinePlot("Carrot", Color.ORANGE, Carrot);
         plot.setAxisLabel(0,"Time (days)");
         plot.getAxis(0).setLabelPosition(0.5,-0.1);
         plot.setAxisLabel(1,"Population (thousands)");
         BaseLabel title = new BaseLabel("Fox&Rabbit Predator Prey Model", Color.BLACK, 0.5, 1.1);
-        title.setFont(new Font("Courier", Font.BOLD, 18));
+        title.setFont(new Font("Arial", Font.BOLD, 25));
         plot.addPlotable(title);
 
         // Add maximums
         String[] scales = new String[2];
         scales = plot.getAxisScales();
        
-        double maxZ = Fox[Fox.length-1];
-        double maxS = Rabbit[Rabbit.length-1];
-        double maxR = Carrot[Carrot.length-1];
+        double maxF = Fox[Fox.length-1];
+        double maxR = Rabbit[Rabbit.length-1];
+        double maxC = Carrot[Carrot.length-1];
         double maxT = time[time.length-1];
-        String labelZ = new String("Max: "+maxZ);
-        plot.addLabel(labelZ,plot.COLORLIST[0], maxT*1.1, maxZ);
-        String labelS = new String("Max: "+maxS);
-        plot.addLabel(labelS,plot.COLORLIST[1], maxT*1.1, maxS);
+        String labelF = new String("Max: "+maxF);
+        plot.addLabel(labelF,plot.COLORLIST[0], maxT*1.1, maxF);
         String labelR = new String("Max: "+maxR);
-        plot.addLabel(labelR,plot.COLORLIST[2], maxT*1.1, maxR);
+        plot.addLabel(labelR,plot.COLORLIST[1], maxT*1.1, maxR);
+        String labelC = new String("Max: "+maxC);
+        plot.addLabel(labelC,plot.COLORLIST[2], maxT*1.1, maxC);
 
 
         JFrame frame = new JFrame("Output of Fox.java");
