@@ -2,7 +2,7 @@
  Term Project - Predator Prey model
 
  Authors: Josh Rosenfeld & Marco Caniglia
- Current version written: February 2019
+ Current version written: May 2019
  Description: 
  */
 
@@ -14,6 +14,9 @@ import java.util.Scanner;
 import org.math.plot.*;
 import org.math.plot.plotObjects.*;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;  // For the JOptionPane class
 
 public class TermProject{
 		/*  Declare constants and parameters
@@ -24,9 +27,11 @@ public class TermProject{
 		public static final double capFox = ; 5000      	// Carrying capacity of foxes
 		public static final double capRabbits = 20000;      // Carrying capacity of rabbits
 		public static final double capCarrots = 1000000;    // Carrying capaciy of carrots
+		/*
 		public static double numFox = ;						// Number of foxes
 		public static double numRabbits = ;					// Number of rabbits
 		public static double numCarrots = ;					// Number of carrots
+		*/
 		public static double birthFox = 0.005;				// Birthrate of foxes				//gestation period for foxes ~50 days
 		public static double birthRabbit = 0.1;				// Birthrate of rabbits				//gestation period for rabbits ~25 days
 		public static double growCarrot = 0.5;				// Growing rate of carrots			//~70 days for carrots to mature
@@ -36,7 +41,7 @@ public class TermProject{
 		public static double rabbitEatRate = 200;				// Rate at which rabbits eat carrots
 	
 	
-	//start main method
+		////////////////////////start main method///////////////////////////
 	public static void main(String[] args)
     {
 		//////////////open file to store data///////////////
@@ -54,10 +59,10 @@ public class TermProject{
 		}
 			
 		////////////initialize main vaiables for Euler's method////////////////
-		double
-		double
-		double 
-		double 
+		double F; //number of foxes
+		double R; //number of rabbits
+		double C; //number of carrots
+		double t; //time of simulation
 		
 		
 		
@@ -129,7 +134,7 @@ public class TermProject{
         plot.setAxisLabel(0,"Time (days)");
         plot.getAxis(0).setLabelPosition(0.5,-0.1);
         plot.setAxisLabel(1,"Population (thousands)");
-        BaseLabel title = new BaseLabel("Zombie Outbreak", Color.BLACK, 0.5, 1.1);
+        BaseLabel title = new BaseLabel("Fox&Rabbit Island", Color.BLACK, 0.5, 1.1);
         title.setFont(new Font("Courier", Font.BOLD, 14));
         plot.addPlotable(title);
 
@@ -145,15 +150,15 @@ public class TermProject{
         double maxR = Carrots[Carrots.length-1];
         double maxT = time[time.length-1];
         String labelZ = new String("Max: "+maxZ);
-        plot.addLabel(labelZ,plot.COLORLIST[0], maxT*1.1, maxZ);
+        plot.addLabel(labelF,plot.COLORLIST[0], maxT*1.1, maxF);
         String labelS = new String("Max: "+maxS);
-        plot.addLabel(labelS,plot.COLORLIST[1], maxT*1.1, maxS);
+        plot.addLabel(labelR,plot.COLORLIST[1], maxT*1.1, maxR);
         String labelR = new String("Max: "+maxR);
-        plot.addLabel(labelR,plot.COLORLIST[2], maxT*1.1, maxR);
+        plot.addLabel(labelC,plot.COLORLIST[2], maxT*1.1, maxC);
 
 
         JFrame frame = new JFrame("TermProject.java");
-        frame.setSize(525, 525);
+        frame.setSize(725, 725);
         frame.setContentPane(plot);
         frame.setVisible(true);
     }
