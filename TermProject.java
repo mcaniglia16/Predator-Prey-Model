@@ -23,7 +23,7 @@ public class TermProject{
 			All constants are /day
 		*/
 		public static final double dt = 1.;        			// Time step (in days)
-		public static final double tFinal = 20000.0;   		// Total time of simulation (in days)
+		public static final double tFinal = 12000.0;   		// Total time of simulation (in days)
 		public static final double capFox = 20;       		// Carrying capacity, in thousands, of foxes
 		public static final double capRabbit = 40;    		// Carrying capacity, in thousands, of rabbits
 		public static final double capCarrot = 100;   		// Carrying capaciy, in thousands, of carrots
@@ -33,11 +33,11 @@ public class TermProject{
 		public static double birthRabbit = 0.001;			// Birthrate of rabbits				//gestation period for rabbits ~25 days
 		public static double growCarrot = 0.001;			// Growing rate of carrots			//~70 days for carrots to mature
 		public static double deathFox = 0.003;				// Deathrate of foxes
-		public static double deathRabbit = 0.0005;			// Deathrate of rabbits
+		public static double deathRabbit = 0.00075;			// Deathrate of rabbits
 		public static double foxHuntRate = 	0.0005;			// Rate at which foxes eat rabbits
-		public static double rabbitEatRate = 0.0035;		// Rate at which rabbits eat carrots
+		public static double rabbitEatRate = 0.004;			// Rate at which rabbits eat carrots
 		public static double foxGrowRate = 0.001;			// Rate at which foxes increase by consuming rabbits
-		public static double rabbitGrowRate = 0.0001;		//tte at which rabbits increase by consuming carrots
+		public static double rabbitGrowRate = 0.0002;		//Rate at which rabbits increase by consuming carrots
 	
 	 
 		////////////////////////start main method///////////////////////////
@@ -93,7 +93,7 @@ public class TermProject{
 		double[]RabbitArr = new double[N];
 		double[]CarrotArr = new double[N];
 		
-        for (int i = 1; i < N; i++)
+        for (int i = 1; i < (N); i++)
 		{
 			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt);
 			FoxArr[i] = Fox;
@@ -112,6 +112,26 @@ public class TermProject{
 				//System.out.println("Foxes: " + (Fox) + " \tRabbits: " + (Rabbit) + "\tCarrots: " + (Carrot) + "\tTime:" + time);
 			//}
 		}
+		
+		/*
+		I put this as a comment but here's where you can add a natureal disaster if you change it to i<(N/2) above
+		
+		for (int i = (N/2); i < N; i++)
+		{
+			Carrot=2/3*Carrot;
+			
+			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt);
+			FoxArr[i] = Fox;
+			
+            Rabbit = Rabbit + ((capRabbit-Rabbit)/capRabbit) * ((Rabbit*birthRabbit + rabbitGrowRate*Rabbit*Carrot)*dt) - (foxHuntRate*Fox*Rabbit*dt) - (deathRabbit*Rabbit*dt);
+			RabbitArr[i] = Rabbit;
+			
+            Carrot = Carrot + ((capCarrot-Carrot)/capCarrot) * (growCarrot*Carrot*dt) - (rabbitEatRate*Rabbit*dt);
+			CarrotArr[i] = Carrot;
+			
+            time = time + dt;
+			timeArr[i] = time;
+		} */
 	
 		plot(timeArr, FoxArr, RabbitArr, CarrotArr);
 	}
