@@ -24,9 +24,9 @@ public class TermProject{
 		*/
 		public static final double dt = 1.;        			// Time step (in days)
 		public static final double tFinal = 20000.0;   		// Total time of simulation (in days)
-		public static final double capFox = 20;       		// Carrying capacity of foxes
-		public static final double capRabbit = 40;    		// Carrying capacity of rabbits
-		public static final double capCarrot = 100;   		// Carrying capaciy of carrots
+		public static final double capFox = 20;       		// Carrying capacity, in thousands, of foxes
+		public static final double capRabbit = 40;    		// Carrying capacity, in thousands, of rabbits
+		public static final double capCarrot = 100;   		// Carrying capaciy, in thousands, of carrots
 		
 		
 		public static double birthFox = 0.001;				// Birthrate of foxes				//gestation period for foxes ~50 days
