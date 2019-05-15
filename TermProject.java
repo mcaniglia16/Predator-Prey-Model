@@ -23,7 +23,7 @@ public class TermProject{
 			All constants are /day
 		*/
 		public static final double dt = 1.;        			// Time step (in days)
-		public static final double tFinal = 8000.0;   		// Total time of simulation (in days)
+		public static final double tFinal = 20000.0;   		// Total time of simulation (in days)
 		public static final double capFox = 20;       		// Carrying capacity of foxes
 		public static final double capRabbit = 40;    		// Carrying capacity of rabbits
 		public static final double capCarrot = 100;   		// Carrying capaciy of carrots
@@ -37,7 +37,7 @@ public class TermProject{
 		public static double foxHuntRate = 	0.0005;			// Rate at which foxes eat rabbits
 		public static double rabbitEatRate = 0.0035;		// Rate at which rabbits eat carrots
 		public static double foxGrowRate = 0.001;			// Rate at which foxes increase by consuming rabbits
-		public static double rabbitGrowRate = 0.00006;		//tte at which rabbits increase by consuming carrots
+		public static double rabbitGrowRate = 0.0001;		//tte at which rabbits increase by consuming carrots
 	
 	 
 		////////////////////////start main method///////////////////////////
@@ -79,7 +79,7 @@ public class TermProject{
         /////////////////// Max number of steps/////////////////////////////////////////////
         int N = (int)(tFinal / dt) + 1;
 
-        ////////////////////// Euler loop for first scenario////////////////////////////////
+        //////////////////////////// Euler loop ////////////////////////////////////////////
 		/* 
 		
 		Logistic Growth:
@@ -88,128 +88,80 @@ public class TermProject{
 	
 		*/
 		
+		double[]timeArr = new double[N];
+		double[]FoxArr = new double[N];
+		double[]RabbitArr = new double[N];
+		double[]CarrotArr = new double[N];
+		
         for (int i = 1; i < N; i++)
 		{
 			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt);
-            Rabbit = Rabbit + ((capRabbit-Rabbit)/capRabbit) * ((Rabbit*birthRabbit + rabbitGrowRate*Rabbit*Carrot)*dt) - (foxHuntRate*Fox*Rabbit*dt) - (deathRabbit*Rabbit*dt);
-            Carrot = Carrot + ((capCarrot-Carrot)/capCarrot) * (growCarrot*Carrot*dt) - (rabbitEatRate*Rabbit*dt);
-            time = time + dt;
+			FoxArr[i] = Fox;
 			
-			if(i%20==0){
-				System.out.println("Foxes: " + (int)(Fox) + " \tRabbits: " + (int)(Rabbit) + "\tCarrots: " + (int)(Carrot) + "\tTime:" + time);
-			}
+            Rabbit = Rabbit + ((capRabbit-Rabbit)/capRabbit) * ((Rabbit*birthRabbit + rabbitGrowRate*Rabbit*Carrot)*dt) - (foxHuntRate*Fox*Rabbit*dt) - (deathRabbit*Rabbit*dt);
+			RabbitArr[i] = Rabbit;
+			
+            Carrot = Carrot + ((capCarrot-Carrot)/capCarrot) * (growCarrot*Carrot*dt) - (rabbitEatRate*Rabbit*dt);
+			CarrotArr[i] = Carrot;
+			
+            time = time + dt;
+			timeArr[i] = time;
+			
+			
+			//if(i%20==0){
+				//System.out.println("Foxes: " + (Fox) + " \tRabbits: " + (Rabbit) + "\tCarrots: " + (Carrot) + "\tTime:" + time);
+			//}
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		/*********************************************************************
+	
+		plot(timeArr, FoxArr, RabbitArr, CarrotArr);
+	}
+	
+
         //////////////////// work to plot the data////////////////////////////
 
+	public static void plot(double[]time, double[] Fox, double[]Rabbit, double[] Carrot){
 		// Reimporting the data to store them as an array
         int i = 0;
 
-        // Open the file
-        File file = new File(program);
-
-        // Allocate the arrays
-        double[] time = new double[N];
-        double[] Foxes = new double[N];
-        double[] Rabbits = new double[N];
-        double[] Carrots = new double[N];
-
-        try
-        {
-            Scanner inputFile = new Scanner(file);
-            while (inputFile.hasNext() && i < N)
-            {
-                try
-                {
-                    String str = inputFile.next();
-                    Time[i] = Double.parseDouble(str);
-
-                    str = inputFile.next();
-                    Foxes[i] = Double.parseDouble(str);
-
-                    str = inputFile.next();
-                    Rabbits[i] = Double.parseDouble(str);
-
-                    str = inputFile.next();
-                    Carrots[i] = Double.parseDouble(str);
-                }
-                catch (java.util.InputMismatchException ex)
-                {
-                    System.out.println("value " + time[i]);
-                }
-
-                i++;
-            }
-        }
-        catch (FileNotFoundException ex)
-        {
-            System.out.println("File not found.");
-        }
-
-
-        
-       /////////////////// Now we can plot ///////////////////////////
-
-        // Create a PlotPanel 
+        // Create a PlotPanel (you can use it like a JPanel)
         Plot2DPanel plot = new Plot2DPanel();
 
         // Define the legend position
         plot.addLegend("SOUTH");
 
         // Add a line plot to the PlotPanel
-        plot.addLinePlot("Foxes", time, Foxes);
-        plot.addLinePlot("Rabbits", time, Rabbits);
-        plot.addLinePlot("Carrots", time, Carrots);
+        plot.addLinePlot("Fox", time, Fox);
+        plot.addLinePlot("Rabbit", time, Rabbit);
+        plot.addLinePlot("Carrot", time, Carrot);
         plot.setAxisLabel(0,"Time (days)");
         plot.getAxis(0).setLabelPosition(0.5,-0.1);
         plot.setAxisLabel(1,"Population (thousands)");
-        BaseLabel title = new BaseLabel("Fox&Rabbit Island", Color.BLACK, 0.5, 1.1);
-        title.setFont(new Font("Courier", Font.BOLD, 14));
+        BaseLabel title = new BaseLabel("Fox&Rabbit Predator Prey Model", Color.BLACK, 0.5, 1.1);
+        title.setFont(new Font("Courier", Font.BOLD, 18));
         plot.addPlotable(title);
 
         // Add maximums
         String[] scales = new String[2];
         scales = plot.getAxisScales();
-        Arrays.sort(Foxes);
-        Arrays.sort(Rabbits);
-        Arrays.sort(Carrots);
-        Arrays.sort(time);
-        double maxZ = Foxes[Foxes.length-1];
-        double maxS = Rabbits[Rabbits.length-1];
-        double maxR = Carrots[Carrots.length-1];
+       
+        double maxZ = Fox[Fox.length-1];
+        double maxS = Rabbit[Rabbit.length-1];
+        double maxR = Carrot[Carrot.length-1];
         double maxT = time[time.length-1];
         String labelZ = new String("Max: "+maxZ);
-        plot.addLabel(labelF,plot.COLORLIST[0], maxT*1.1, maxF);
+        plot.addLabel(labelZ,plot.COLORLIST[0], maxT*1.1, maxZ);
         String labelS = new String("Max: "+maxS);
-        plot.addLabel(labelR,plot.COLORLIST[1], maxT*1.1, maxR);
+        plot.addLabel(labelS,plot.COLORLIST[1], maxT*1.1, maxS);
         String labelR = new String("Max: "+maxR);
-        plot.addLabel(labelC,plot.COLORLIST[2], maxT*1.1, maxC);
+        plot.addLabel(labelR,plot.COLORLIST[2], maxT*1.1, maxR);
 
 
-        JFrame frame = new JFrame("TermProject.java");
-        frame.setSize(725, 725);
+        JFrame frame = new JFrame("Output of Fox.java");
+        frame.setSize(525, 525);
         frame.setContentPane(plot);
         frame.setVisible(true);
-    
-	**********************************************************************/
 	}
 }
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		
