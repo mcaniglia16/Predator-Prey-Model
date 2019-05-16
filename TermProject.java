@@ -1,9 +1,10 @@
 /**
-* 			Term Project - Predator Prey model. Fox, Rabbit, and Carrot Populations
+* 			Term Project - Predator Prey model: Fox, Rabbit, and Carrot Populations
 *
 * 				Authors: Josh Rosenfeld & Marco Caniglia
 *				Current version written: May 2019
-* 
+* 				
+*				Short Description: This is the predator prey model on an isolated island for three species: Carrots (the vegetation), Rabbits (the herbivores) and Foxes (the carnivores). No migration occurs, and the rabbits can only feed off of the carrots while the foxes can only feed off of the rabbits. Two human disruptions occur over the 100 years: a chemical leak that affects the soil, killing many of the carrots for a year and a group of hunters looking to bring back the fox furs.
 */
 
 // Import all packages
@@ -16,32 +17,32 @@ import org.math.plot.plotObjects.*;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;  // For the JOptionPane class
+import javax.swing.JOptionPane;
 import org.knowm.xchart.QuickChart;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 
 public class TermProject{
 		/*  Declare constants and parameters
-			All constants are /day
+			All Rates occur per day
 		*/
 		public static final double dt = 1.;        			// Time step (in days)
-		public static final double tFinal = 36525.0;   		// Total time of simulation (in days)
+		public static final double tFinal = 36525.0;   		// Total time of simulation (in days) --> 100 years
 		public static final double capFox = 18.0;       	// Carrying capacity, in thousands, of foxes
 		public static final double capRabbit = 40.0;		// Carrying capacity, in thousands, of rabbits
 		public static final double capCarrot = 100.0;		// Carrying capaciy, in thousands, of carrots
 		
-		public static double birthFox = 0.0001;				// Birthrate of foxes without prey (rabbits)
-		public static double birthRabbit = 0.0001;			// Birthrate of rabbits	without vegetation (carrots)			
-		public static double growCarrot = 0.0022;			// Growing rate of carrots			
-		public static double deathFox = 0.0005;				// Deathrate of foxes
-		public static double deathRabbit = 0.0005;			// Deathrate of rabbits
+		public static double birthFox = 0.0001;				// Birthrate of foxes without food/prey (rabbits)
+		public static double birthRabbit = 0.0001;			// Birthrate of rabbits	without food/vegetation (carrots)			
+		public static double growCarrot = 0.0022;			// Natural rowing rate of carrots			
+		public static double deathFox = 0.0005;				// Natural deathrate of foxes
+		public static double deathRabbit = 0.0005;			// Natural deathrate of rabbits
 		public static double foxHuntRate = 	0.0001;			// Rate at which foxes kills and eats rabbits per encounter
 		public static double rabbitEatRate = 0.003;			// Rate at which rabbits eat carrots
 		public static double foxGrowRate = 0.000175;		// Rate at which foxes increase by consuming rabbits per encounter
 		public static double rabbitGrowRate = 0.00012;		// Rate at which rabbits increase by consuming carrots
-		public static double chemicalSoilKillRate = 0.0015; // Rate at which the chemicals kill carrots
-		public static double furHuntersKillRate = 0.06;		// Rate at which the hunters kill the foxes for their fur
+		public static double chemicalSoilKillRate = 0.0015; // Rate at which the chemicals kill carrots: 0.15% of the population dies/day
+		public static double furHuntersKillRate = 0.06;		// Rate at which the hunters kill the foxes for their fur: 6% of the population/day
 	
  
 		////////////////////////start main method///////////////////////////
@@ -62,16 +63,16 @@ public class TermProject{
 		}
 			
 		///////////initialize main vaiables for Euler's method//////////////
-		//Populations:
+		//Populations are in the thousands:
 		
 		double Fox;				// Population of Foxes
         double Rabbit;			// Population of Rabbits
         double Carrot;			// Population of Carrots
         double time;			// Time of the simulation (in days)
 		
-        Fox = 5.;				// *thousand foxes
-        Rabbit = 10.;			// thousand rabbits
-        Carrot = 40.;			// thousand carrots
+        Fox = 5.;				// 5,000 foxes
+        Rabbit = 10.;			// 10,000 rabbits
+        Carrot = 40.;			// 40,000 carrots
         time = 0.;
 		
 		///////////////////Print initial values to file using c-style printf////////////////
@@ -100,14 +101,15 @@ public class TermProject{
 			sw.displayChart();
 		
 			double[][] mostRecentDataSet = new double[3][100];
-			int range = 2500;						//range for real time graph		
+			int range = 5000;						//range for real time graph		
 		
 		////////////////////////////// Euler loop ////////////////////////////////////////////
 		/*** 
 		
 		Logistic Growth:
 		(cap-popsize)/cap = limits the growth of the population near maxima.
-							At maximum, population does not grow much, but at minimum pop grows fast
+							At maximum, population = capacity, which makes thefollowing ratio equal to zero leading to no growth.
+							Near the minimum, the ratio is close to 1 allowing for maximum growht.
 	
 		***/
 		
@@ -205,7 +207,7 @@ public class TermProject{
 
 }
 		
-		//useful link for the XChart library:
+		//useful links for the XChart library:
 		//Class XYChart https://knowm.org/javadocs/xchart/org/knowm/xchart/XYChart.html
 		//Class QuickChart https://knowm.org/javadocs/xchart/org/knowm/xchart/QuickChart.html
 		
