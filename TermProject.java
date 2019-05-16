@@ -4,7 +4,10 @@
 * 				Authors: Josh Rosenfeld & Marco Caniglia
 *				Current version written: May 2019
 * 				
-*				Short Description: This is the predator prey model on an isolated island for three species: Carrots (the vegetation), Rabbits (the herbivores) and Foxes (the carnivores). No migration occurs, and the rabbits can only feed off of the carrots while the foxes can only feed off of the rabbits. Two human disruptions occur over the 100 years: a chemical leak that affects the soil, killing many of the carrots for a year and a group of hunters looking to bring back the fox furs.
+*				Short Description: This is the predator prey model on an isolated island for three species: Carrots (the vegetation), Rabbits (the herbivores) and 
+*				Foxes (the carnivores). No migration occurs, and the rabbits can only feed off of the carrots while the foxes can only feed off of the rabbits. Two human 
+*				disruptions occur over the 100 years: a chemical leak that affects the soil, killing many of the carrots for a year and a group of hunters looking to bring 
+*				back the fox furs.
 */
 
 // Import all packages
@@ -34,7 +37,7 @@ public class TermProject{
 		
 		public static double birthFox = 0.0001;				// Birthrate of foxes without food/prey (rabbits)
 		public static double birthRabbit = 0.0001;			// Birthrate of rabbits	without food/vegetation (carrots)			
-		public static double growCarrot = 0.0022;			// Natural rowing rate of carrots			
+		public static double growCarrot = 0.0022;			// Natural growing rate of carrots			
 		public static double deathFox = 0.0005;				// Natural deathrate of foxes
 		public static double deathRabbit = 0.0005;			// Natural deathrate of rabbits
 		public static double foxHuntRate = 	0.0001;			// Rate at which foxes kills and eats rabbits per encounter
@@ -62,7 +65,7 @@ public class TermProject{
 			System.exit(0);
 		}
 			
-		///////////initialize main vaiables for Euler's method//////////////
+		///////////initialize main variables for Euler's method//////////////
 		//Populations are in the thousands:
 		
 		double Fox;				// Population of Foxes
@@ -92,11 +95,11 @@ public class TermProject{
 		
 			SwingWrapper<XYChart> sw;				//Swing Wrapper class in XChart library
 			XYChart chart;
-		
-			chart = QuickChart.getChart("Fox & Rabbit Real Time Plot", "Time", "Value", new String[] {"Fox", "Rabbit", "Carrot"}, new double[] { 0 }, new double[][] {{0}, {0}, {0}});
+													//QuickChart is a convenience class for making Charts.	 org.knowm.xchart.QuickChart
+			chart = QuickChart.getChart("Fox & Rabbit Real Time Plot", "Time (in Days)", "Population (in Thousands)", new String[] {"Fox", "Rabbit", "Carrot"}, new double[] { 0 }, new double[][] {{0}, {0}, {0}});
 			chart.getStyler().setLegendVisible(true);
 			chart.getStyler().setXAxisTicksVisible(true);
- 
+			
 			sw = new SwingWrapper<XYChart>(chart);
 			sw.displayChart();
 		
@@ -140,7 +143,7 @@ public class TermProject{
 			
 			try { Thread.sleep(1); } catch(Exception e) {}		//SLEEP used to slow down the real time graph.
 			
-			if (i>range && (i%10 == 0)) {
+			if (i>range && (i%10 == 0)) {						//plots every datapoint that is a factor of 10 to speed up program
 				double[] ta = Arrays.copyOfRange(timeArr, i-range, i);
 				
 				chart.updateXYSeries("Fox", ta, Arrays.copyOfRange(FoxArr, i-range, i), null);						//adds the Fox line to graph
@@ -152,7 +155,7 @@ public class TermProject{
 			
 		}
 	
-		plot(timeArr, FoxArr, RabbitArr, CarrotArr);
+		plot(timeArr, FoxArr, RabbitArr, CarrotArr);			//once the realtime graph is done,the plot method will display the final plot a 2D panel of the population variations
 	}
 	
         //////////////////// method to plot the data////////////////////////////
