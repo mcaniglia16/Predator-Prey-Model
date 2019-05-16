@@ -100,7 +100,7 @@ public class TermProject{
 			sw.displayChart();
 		
 			double[][] mostRecentDataSet = new double[3][100];
-			int range = 2500;						//range for real time graph		
+			int range = 5000;						//range for real time graph		
 		
 		////////////////////////////// Euler loop ////////////////////////////////////////////
 		/*** 
@@ -205,7 +205,7 @@ public class TermProject{
 
 }
 		
-		//useful link for the XChart library:
+		//useful links for the XChart library:
 		//Class XYChart https://knowm.org/javadocs/xchart/org/knowm/xchart/XYChart.html
 		//Class QuickChart https://knowm.org/javadocs/xchart/org/knowm/xchart/QuickChart.html
 		
