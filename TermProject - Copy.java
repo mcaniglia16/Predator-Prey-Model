@@ -1,12 +1,12 @@
 /**
-* 			Term Project - Predator Prey model. Fox, Rabbit, and Carrot Populations
-*
-* 				Authors: Josh Rosenfeld & Marco Caniglia
-*				Current version written: May 2019
-* 
-*/
+ Term Project - Predator Prey model
 
-// Import all packages
+ Authors: Josh Rosenfeld & Marco Caniglia
+ Current version written: May 2019
+ Description: 
+ */
+
+// Import packages
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;
@@ -17,9 +17,6 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;  // For the JOptionPane class
-import org.knowm.xchart.QuickChart;
-import org.knowm.xchart.SwingWrapper;
-import org.knowm.xchart.XYChart;
 
 public class TermProject{
 		/*  Declare constants and parameters
@@ -30,6 +27,7 @@ public class TermProject{
 		public static final double capFox = 18.0;       	// Carrying capacity, in thousands, of foxes
 		public static final double capRabbit = 40.0;		// Carrying capacity, in thousands, of rabbits
 		public static final double capCarrot = 100.0;		// Carrying capaciy, in thousands, of carrots
+		
 		
 		public static double birthFox = 0.0001;				// Birthrate of foxes without prey (rabbits)
 		public static double birthRabbit = 0.0001;			// Birthrate of rabbits	without vegetation (carrots)			
@@ -43,11 +41,11 @@ public class TermProject{
 		public static double chemicalSoilKillRate = 0.0015; // Rate at which the chemicals kill carrots
 		public static double furHuntersKillRate = 0.06;		// Rate at which the hunters kill the foxes for their fur
 	
- 
+	 
 		////////////////////////start main method///////////////////////////
 	public static void main(String[] args)
     {
-		////////////////////////open file to store data/////////////////////
+		//////////////open file to store data///////////////
 		
 		String project = "FoxVsRabbitsOutput.txt";
 		PrintWriter outputFile = null;
@@ -61,92 +59,62 @@ public class TermProject{
 			System.exit(0);
 		}
 			
-		///////////initialize main vaiables for Euler's method//////////////
+		////////////initialize main vaiables for Euler's method////////////////
 		//Populations:
 		
-		double Fox;				// Population of Foxes
-        double Rabbit;			// Population of Rabbits
-        double Carrot;			// Population of Carrots
-        double time;			// Time of the simulation (in days)
-		
-        Fox = 5.;				// *thousand foxes
-        Rabbit = 10.;			// thousand rabbits
-        Carrot = 40.;			// thousand carrots
+		double Fox;		// Population of Foxes
+        double Rabbit;	// Population of Rabbits
+        double Carrot;	// Population of Carrots
+        double time;	// Time of the simulation (in days)
+
+        Fox = 5.;		// *thousand foxes
+        Rabbit = 10.;	// thousand rabbits
+        Carrot = 40.;	// thousand carrots
         time = 0.;
 		
 		///////////////////Print initial values to file using c-style printf////////////////
         outputFile.printf("%2.4f\t%6.1f\t%6.1f\t%6.1f\n",Fox,Rabbit,Carrot,time);
 		
-		/////////////////////Use Euler's method to evolve the solution//////////////////////
-      
-        int N = (int)(tFinal / dt) + 1;				//Max number of steps
+		///////////////////Using Euler's method to evolve the solution//////////////////////
+       
+	   
+        /////////////////// Max number of steps/////////////////////////////////////////////
+        int N = (int)(tFinal / dt) + 1;
 
+        //////////////////////////// Euler loop ////////////////////////////////////////////
+		/* 
+		
+		Logistic Growth:
+		(cap-popsize)/cap = limits the growth of the population near maxima.
+							At maximum, population does not grow much, but at minimum pop grows fast
+	
+		*/
+		
 		double[]timeArr = new double[N];
 		double[]FoxArr = new double[N];
 		double[]RabbitArr = new double[N];
 		double[]CarrotArr = new double[N];
 		
 		
-		////////////////////////real time graph using XChart library/////////////////////////
-		
-			SwingWrapper<XYChart> sw;				//Swing Wrapper class in XChart library
-			XYChart chart;
-		
-			chart = QuickChart.getChart("Fox & Rabbit Real Time Plot", "Time", "Value", new String[] {"Fox", "Rabbit", "Carrot"}, new double[] { 0 }, new double[][] {{0}, {0}, {0}});
-			chart.getStyler().setLegendVisible(true);
-			chart.getStyler().setXAxisTicksVisible(true);
- 
-			sw = new SwingWrapper<XYChart>(chart);
-			sw.displayChart();
-		
-			double[][] mostRecentDataSet = new double[3][100];
-			int range = 2500;						//range for real time graph		
-		
-		////////////////////////////// Euler loop ////////////////////////////////////////////
-		/*** 
-		
-		Logistic Growth:
-		(cap-popsize)/cap = limits the growth of the population near maxima.
-							At maximum, population does not grow much, but at minimum pop grows fast
-	
-		***/
-		
 		
 		for (int i = 1; i < N; i++) 
 		{
 			
 			Fox = Fox + ((capFox-Fox)/capFox)*((birthFox*Fox + foxGrowRate*Fox*Rabbit)*dt) - (deathFox*Fox*dt);
-			if(i>=(80*365.25) && i<=((80*365.25)+14)){
-				Fox -= (furHuntersKillRate*Fox*dt);				//Fox population is hunted for their fur for 2 weeks starting at year 80
-			}				
+			if(i>=(80*365.25) && i<=((80*365.25)+14)) Fox -= (furHuntersKillRate*Fox*dt);
 			FoxArr[i] = Fox;
 			
-		
             Rabbit = Rabbit + ((capRabbit-Rabbit)/capRabbit) * ((Rabbit*birthRabbit + rabbitGrowRate*Rabbit*Carrot)*dt) - (foxHuntRate*Fox*Rabbit*dt) - (deathRabbit*Rabbit*dt);
 			RabbitArr[i] = Rabbit;
 			
-			
             Carrot = Carrot + ((capCarrot-Carrot)/capCarrot) * (growCarrot*Carrot*dt) - (rabbitEatRate*Rabbit*dt);
-			if(i>=(50*365.25) && i<=(51*365.25)){
-				Carrot -= Carrot*chemicalSoilKillRate;			//Chemicals in the soil killing carrots for a year form year 50 until year 51
-			}				
-			CarrotArr[i] = Carrot;
 			
+			
+			if(i>=(50*365.25) && i<=(51*365.25)) Carrot -= (Carrot*chemicalSoilKillRate);
+			CarrotArr[i] = Carrot;
 			
             time = time + dt;
 			timeArr[i] = time;
-			
-			try { Thread.sleep(1); } catch(Exception e) {}		//SLEEP used to slow down the real time graph.
-			
-			if (i>range && (i%10 == 0)) {
-				double[] ta = Arrays.copyOfRange(timeArr, i-range, i);
-				
-				chart.updateXYSeries("Fox", ta, Arrays.copyOfRange(FoxArr, i-range, i), null);						//adds the Fox line to graph
-				chart.updateXYSeries("Rabbit", ta, Arrays.copyOfRange(RabbitArr, i-range, i), null);				//adds the Rabbit line
-				chart.updateXYSeries("Carrot", ta, Arrays.copyOfRange(CarrotArr, i-range, i), null);				//adds the Carrot line
-				sw.repaintChart();
-
-			}
 			
 		}
 	
@@ -202,7 +170,6 @@ public class TermProject{
         frame.setContentPane(plot);
         frame.setVisible(true);
 	}
-
 }
 		
 		
