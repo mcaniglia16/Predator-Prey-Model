@@ -153,8 +153,8 @@ public class TermProject{
 		plot(timeArr, FoxArr, RabbitArr, CarrotArr);
 	}
 	
-        //////////////////// work to plot the data////////////////////////////
-							//// in a method  ////
+        //////////////////// method to plot the data////////////////////////////
+							
 							
 	public static void plot(double[]time, double[] Fox, double[]Rabbit, double[] Carrot){
 		
