@@ -92,18 +92,15 @@ public class TermProject{
 		
 		
 		////////////////////////real time graph using XChart library/////////////////////////
-		
-			SwingWrapper<XYChart> sw;				//Swing Wrapper class in XChart library
-			XYChart chart;
+	
 													//QuickChart is a convenience class for making Charts.	 org.knowm.xchart.QuickChart
-			chart = QuickChart.getChart("Fox & Rabbit Real Time Plot", "Time (in Days)", "Population (in Thousands)", new String[] {"Fox", "Rabbit", "Carrot"}, new double[] { 0 }, new double[][] {{0}, {0}, {0}});
+			XYChart chart = QuickChart.getChart("Fox & Rabbit Real Time Plot", "Time (in Days)", "Population (in Thousands)", new String[] {"Fox", "Rabbit", "Carrot"}, new double[] { 0 }, new double[][] {{0}, {0}, {0}});
 			chart.getStyler().setLegendVisible(true);
-			chart.getStyler().setXAxisTicksVisible(true);
-			
-			sw = new SwingWrapper<XYChart>(chart);
-			sw.displayChart();
+			chart.getStyler().setAxisTicksVisible(true);
 		
-			double[][] mostRecentDataSet = new double[3][100];
+			SwingWrapper<XYChart> sw = new SwingWrapper<XYChart>(chart);	//SwingWrapper class in XChart library from Knowm
+			sw.displayChart();
+
 			int range = 5000;						//range for real time graph		
 		
 		////////////////////////////// Euler loop ////////////////////////////////////////////
