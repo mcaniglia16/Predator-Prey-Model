@@ -138,16 +138,17 @@ public class TermProject{
             time = time + dt;
 			timeArr[i] = time;
 			
-			try { Thread.sleep(1); } catch(Exception e) {}		//SLEEP used to slow down the real time graph.
 			
-			if (i>range && (i%10 == 0)) {						//plots every datapoint that is a factor of 10 to speed up program
+			
+			if (i>range && (i%10 == 0)) {						//plots every datapoint that is a factor of 10 to speed up program 
 				double[] ta = Arrays.copyOfRange(timeArr, i-range, i);
 				
 				chart.updateXYSeries("Fox", ta, Arrays.copyOfRange(FoxArr, i-range, i), null);						//adds the Fox line to graph
 				chart.updateXYSeries("Rabbit", ta, Arrays.copyOfRange(RabbitArr, i-range, i), null);				//adds the Rabbit line
 				chart.updateXYSeries("Carrot", ta, Arrays.copyOfRange(CarrotArr, i-range, i), null);				//adds the Carrot line
 				sw.repaintChart();
-
+				
+				try { Thread.sleep(5); } catch(Exception e) {}	//SLEEP used to slow down the real time graph.
 			}
 			
 		}
