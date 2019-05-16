@@ -205,7 +205,9 @@ public class TermProject{
 
 }
 		
-		
+		//useful link for the XChart library:
+		//Class XYChart https://knowm.org/javadocs/xchart/org/knowm/xchart/XYChart.html
+		//Class QuickChart https://knowm.org/javadocs/xchart/org/knowm/xchart/QuickChart.html
 		
 		
 		
