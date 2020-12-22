@@ -1,6 +1,6 @@
 
-## Predator Prey Model Project 
-### Authored by: Josh Rosenfeld, Marco Caniglia 
+# Predator Prey Model Project 
+## Authored by: Josh Rosenfeld, Marco Caniglia 
 
 ### Introduction to the problem 📑
 When things have the right balance and are in the right proportions, the world is known
@@ -76,6 +76,7 @@ shows that the period of each cycle is approximately 10 years. The graph also de
 the size of each population affects each other: the number of foxes depends on the number of
 rabbits, the number of rabbits depends on the number of carrots as well as the number of foxes,
 and the number of carrots depends on the number of rabbits.
+
 ![alt text](https://user-images.githubusercontent.com/50206147/102924347-5eeb6880-445f-11eb-9726-dd66358b1515.png)
 As we take a closer look, we can notice that the population of the rabbits closely follows
 the population of the carrots: as the number of carrots rise, the rabbits have more food and
@@ -102,4 +103,4 @@ ruined. However, in a perfectly balanced ecosystem with manageable interferences
 balances everything out and the populations will reach an equilibrium once these disruptions are
 over.
 
-### To observe the above graph being plotted in real-time, simply run the term_project.java file
+### To observe the above graph being plotted in real-time, simply run the TermProject.java file
